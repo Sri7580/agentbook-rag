@@ -1,4 +1,3 @@
-"""Environment setup and constants."""
 import os
 
 from dotenv import load_dotenv
@@ -12,7 +11,6 @@ PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "agentic-ai-index")
 PINECONE_CLOUD = os.getenv("PINECONE_CLOUD", "aws")
 PINECONE_REGION = os.getenv("PINECONE_REGION", "us-east-1")
 
-# "free" = local HuggingFace embeddings + Groq LLM (no billing). "openai" = OpenAI models.
 PROVIDER = os.getenv("PROVIDER", "free").lower()
 if PROVIDER == "openai":
     EMBEDDING_MODEL = "text-embedding-3-small"
@@ -27,7 +25,7 @@ CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 TOP_K = int(os.getenv("TOP_K", "4"))
 
-# Cosine similarity of the best chunk below this => treat as out-of-scope.
+
 MIN_RELEVANCE = float(os.getenv("MIN_RELEVANCE", "0.25"))
 
 REFUSAL = "I cannot answer based on the provided document."

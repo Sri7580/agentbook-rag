@@ -1,4 +1,3 @@
-"""Model factory. Free default: Pinecone-hosted embeddings + Groq LLM. Set PROVIDER=openai to use OpenAI."""
 import os
 
 from src import config

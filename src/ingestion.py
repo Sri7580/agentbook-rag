@@ -1,4 +1,3 @@
-"""PDF loading, chunking, embedding and Pinecone index setup."""
 import argparse
 import os
 import time
@@ -19,7 +18,6 @@ def download_pdf(path: str = config.PDF_PATH) -> str:
     url = f"https://drive.google.com/uc?export=download&id={config.PDF_DRIVE_ID}"
     session = requests.Session()
     resp = session.get(url, timeout=60)
-    # Large files return an HTML confirmation page first.
     if not resp.content.startswith(b"%PDF"):
         resp = session.get(url + "&confirm=t", timeout=120)
     if not resp.content.startswith(b"%PDF"):
@@ -30,7 +28,6 @@ def download_pdf(path: str = config.PDF_PATH) -> str:
 
 
 def ensure_index(index_name: str) -> None:
-    """Create the Pinecone index (1536 dims, cosine) if it does not exist."""
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
     if index_name in pc.list_indexes().names():
         return

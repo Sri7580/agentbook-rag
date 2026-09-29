@@ -1,4 +1,3 @@
-"""LangGraph workflow: retrieve -> generate, strictly grounded in the eBook."""
 from typing import List, TypedDict
 
 from langchain_pinecone import PineconeVectorStore
@@ -12,7 +11,7 @@ class AgentState(TypedDict):
     question: str
     context: List[str]
     answer: str
-    score: float  # cosine similarity of the best retrieved chunk (0-1)
+    score: float 
 
 
 SYSTEM_PROMPT = f"""You are a strict question-answering assistant.
@@ -34,7 +33,7 @@ def build_rag_graph(index_name: str = config.PINECONE_INDEX_NAME):
         return {"context": context, "score": round(max(0.0, min(1.0, float(top))), 4)}
 
     def generate_node(state: AgentState) -> dict:
-        # Out-of-scope guard: skip the LLM when nothing relevant was retrieved.
+        
         if not state["context"] or state["score"] < config.MIN_RELEVANCE:
             return {"answer": config.REFUSAL, "score": 0.0}
 
@@ -46,7 +45,7 @@ def build_rag_graph(index_name: str = config.PINECONE_INDEX_NAME):
             ]
         )
         answer = response.content.strip()
-        # The model itself declined -> confidence is zero.
+        
         score = 0.0 if config.REFUSAL.lower() in answer.lower() else state["score"]
         return {"answer": answer, "score": score}
 
